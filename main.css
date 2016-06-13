@@ -1,3 +1,27 @@
 body {
-  background-color: salmon;
+  margin: 20px 30px;
+}
+
+h2 {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.place-finder input {
+  height: 35px;
+  margin-right: -4px;
+  border: 1px solid #8ac9ff;
+  font-size: 25px;
+  font-style: italic;
+}
+
+.place-finder button {
+  height: 35px;
+  width: 35px;
+  border: 0;
+  vertical-align: bottom;
+  font-size: 25px;
+  background: #8ac9ff;
+  color: #fff;
+  cursor: pointer;
 }
