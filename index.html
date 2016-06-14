@@ -4,11 +4,29 @@
     <link rel='stylesheet' href='font-awesome/css/font-awesome.min.css'>
   </head>
   <body>
-    <h2>Search for a place...</h2>
+    <h2>
+      Search for a place near
+      <span class='locator'>
+        <span class='geolocated'>
+          you
+          <a href='#'>[somewhere else]</a>
+        </span>
+        <span class='user-provided'>
+          <input class='location'></input>
+          <i class='loading fa fa-spinner fa-spin'></i>
+          <i class='success fa fa-check'></i>
+          <a href='#'>[near me]</a>
+        </span>
+      </span>
+    </h2>
     <div class='place-finder'>
-      <input></input>
-      <button><i class='fa fa-search' aria-hidden='true'></i></button>
+      <input class='search-input'></input>
+      <button class='search-button' disabled><i class='fa fa-search'></i></button>
     </div>
+    <div id='map'></div>
   </body>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CgXTQCNbSq44Vdfd-USv1n0XSOvJ0ZM&libraries=places"></script>
+
+  <script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
   <script src='index.js'></script>
 </html>

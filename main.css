@@ -7,6 +7,24 @@ h2 {
   font-style: italic;
 }
 
+.locator span {
+  display: none;
+}
+
+.locator input {
+  font-size: 18px;
+  font-style: italic;
+}
+
+.locator a {
+  font-size: 16px;
+  display: none;
+}
+
+.locator i {
+  color: #269bff;
+}
+
 .place-finder input {
   height: 35px;
   margin-right: -4px;
@@ -24,4 +42,8 @@ h2 {
   background: #8ac9ff;
   color: #fff;
   cursor: pointer;
+}
+
+.place-finder button:disabled {
+  background: #ddd;
 }
