@@ -23,14 +23,18 @@ var PlaceFinder = function(el, api_key) {
   var $search = $el.find('.search-button');
   var locator = new Locator($('.locator')[0]);
   var gotBrowserLocation = locator.getBrowserLocation();
+  this.gotUserInputLocation = locator.custom_location_promise;
+
+  gotBrowserLocation.done(function() {
+    enableSearch();
+  });
+  this.gotUserInputLocation.done(function () {
+    enableSearch();
+  });
 
   var enableSearch = function () {
     $search.removeAttr('disabled');
   };
-
-  gotBrowserLocation.done(function () {
-    enableSearch();
-  });
 
   var queryGoogle = function (keyword, coordinates) {
     var results_promise = $.Deferred();
@@ -51,25 +55,14 @@ var PlaceFinder = function(el, api_key) {
   var performSearch = function () {
     if ($search.is(':disabled')) { return; }
     var keyword = $input.val();
-    var coordinates;
+    var current = locator.use_browser_location;
+    var latlng = current ? locator.browser_location : locator.user_provided_location;
 
-    if (locator.use_browser_location) {
-      coordinates = formatCoordinates(locator.browser_location);
-    } else {
-      coordinates = formatCoordinates(locator.user_provided_location);
-    }
-
-    queryGoogle(keyword, coordinates).done(displayResults);
-  }
-
-  var formatCoordinates = function (coordinates) {
-    return {
-      lat: coordinates.latitude,
-      lng: coordinates.longitude
-    }
+    queryGoogle(keyword, latlng).done(displayResults);
   }
 
   var displayResults = function (data) {
+    debugger;
     // TODO:
     // iterate over data array,
     // use an underscore template with some styling to append results
@@ -89,25 +82,13 @@ var Locator = function(el) {
   var self = this;
   var $el = $(el);
   var $input = $el.find('.location');
+  var fetcher = new LocationFetcher($el.find('.user-provided'));
   // hide icons after rendering to ensure css animations get triggered
   $el.find('i').hide();
-  var fetcher = new LocationFetcher($el.find('.user-provided'));
 
-  // event listeners for functionality of locator
-  $el.find('a').click(function(){
-    this.toggle();
-  }.bind(this));
-
-  $input.blur(function () {
-    var location_promise = fetcher.fetch();
-    location_promise.done(function (data) {
-      // TODO:
-      // set locator user_provided_location to info from data
-      fetcher.showSuccess();
-    });
-  });
 
   // public functions / attributes
+  this.custom_location_promise = $.Deferred();
   this.use_browser_location = false;
   this.browser_location = {};
   this.user_provided_location = {};
@@ -116,7 +97,10 @@ var Locator = function(el) {
     var geoLocated = $.Deferred();
 
     navigator.geolocation.getCurrentPosition(function(position) {
-      self.browser_location = position.coords;
+      self.browser_location = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
       geoLocated.resolve();
     });
 
@@ -142,6 +126,20 @@ var Locator = function(el) {
   };
 
   this.showFetcher();
+
+  // event listeners for functionality of locator
+  $el.find('a').click(function(){
+    this.toggle();
+  }.bind(this));
+
+  $input.blur(function () {
+    var location_promise = fetcher.fetch();
+    location_promise.done(function (data) {
+      this.custom_location_promise.resolve();
+      this.user_provided_location = data;
+    // not sure why, but using `self` didn't work in here...
+    }.bind(this));
+  }.bind(this));
 }
 
 // this object will get lat/lng from google maps api if user refuses to allow using
@@ -159,19 +157,18 @@ var LocationFetcher = function(el) {
     $el.find('.loading').hide();
   }
   this.fetch = function () {
-    var promise = $.Deferred();
     this.showLoader();
-    // TODO:
-    // make ajax call to get location
-    // on success, hide loader and resolve deferred, enable search
-    setTimeout(function () {
-      promise.resolve();
-    }, 1000);
+    var promise = $.Deferred();
+    var url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' + $input.val();
+    $.getJSON(url, function (data) {
+      this.showSuccess();
+      promise.resolve(data.results[0].geometry.location);
+    }.bind(this));
     return promise;
   }
 };
 
 // run the application code when page finishes loading.
 $(function () {
-  new PlaceFinder($('.place-finder')[0], GOOGLE_API_KEY);
+  pf = new PlaceFinder($('.place-finder')[0], GOOGLE_API_KEY);
 });
