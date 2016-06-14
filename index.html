@@ -23,12 +23,31 @@
       <input class='search-input'></input>
       <button class='search-button' disabled><i class='fa fa-search'></i></button>
     </div>
+    <div id='results'>
+      <!-- result templates will get rendered here. -->
+    </div>
+    <!-- this is for the sake of google. Not using the map for now. -->
     <div id='map'></div>
   </body>
+
+  <!-- libraries included - required google, jquery & underscore -->
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CgXTQCNbSq44Vdfd-USv1n0XSOvJ0ZM&libraries=places"></script>
   <script src='https://code.jquery.com/jquery-1.12.4.min.js'></script>
   <script src='
 https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'></script>
 
   <script src='index.js'></script>
+  <script src='javascripts/place_finder.js'></script>
+  <script src='javascripts/locator.js'></script>
+  <script src='javascripts/location_fetcher.js'></script>
+
+  <script type='text/template' id='results-template'>
+    <div>
+      <h3><%= result.name %></h3>
+      <span>Address: <%= result.vicinity %></span>
+      <% if (result.rating) { %>
+        <span>Rating: <%= result.rating %></span>
+      <% } %>
+    </div>
+  </script>
 </html>

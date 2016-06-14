@@ -9,6 +9,7 @@ h2 {
 
 .locator span {
   display: none;
+  line-height: 28px;
 }
 
 .locator input {
@@ -28,7 +29,7 @@ h2 {
 .place-finder input {
   height: 35px;
   margin-right: -4px;
-  border: 1px solid #8ac9ff;
+  border: 1px solid #269bff;;
   font-size: 25px;
   font-style: italic;
 }
@@ -39,11 +40,20 @@ h2 {
   border: 0;
   vertical-align: bottom;
   font-size: 25px;
-  background: #8ac9ff;
+  background: #269bff;
   color: #fff;
   cursor: pointer;
 }
 
 .place-finder button:disabled {
   background: #ddd;
+}
+
+#results {
+  margin-top: 50px;
+}
+
+#results div {
+  padding-bottom: 20px;
+  border-bottom: dotted 2px #269bff;
 }
