@@ -25,6 +25,9 @@ with css, given a mock I can make it look pixel-perfect quite quickly).
 
 ### User guide
 
+Would work from a file downloaded to your computer.
+Also hosted on github pages - https://istro.github.io/challenge-1
+
 When opening the file, user is prompted to allow using current location.
 A. that request is denied:
   - user is presented with an input for location, search button is disabled.
